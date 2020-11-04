@@ -18,8 +18,6 @@ class Counter extends React.Component {
   }
 
   render() {
-    console.log('ELEMENTOS DO COUNTER RENDERIZADOS!!!')
-
     return (
       <div>
         <p>Our counter is at {this.state.counter}</p>

@@ -1,7 +1,8 @@
 import React from 'react';
 
-import Counter from './components/Counter/Counter';
 import ActionButton from './components/ActionButtons/ActionButton';
+import FilterActions from './components/FilterActions/FilterActions';
+import CreateNewUserForm from './components/CreateNewUserForm/CreateNewUserForm';
 
 import users from './users.json';
 
@@ -9,6 +10,7 @@ import './App.css';
 
 class App extends React.Component {
   state = {
+    allUsers: users,
     users,
     isSortingAscending: true,
   };
@@ -24,7 +26,6 @@ class App extends React.Component {
   };
 
   displayContacts = () => {
-    console.log(this.state.users)
     const usersJSX = this.state.users.map((user, idx) => {
       return (
         <div key={`user-${idx + 1}`}>
@@ -36,13 +37,28 @@ class App extends React.Component {
     });
 
     return usersJSX;
-  }
+  };
+
+  filterUsers = (userName) => {
+    const filteredUsers = this.state.allUsers.filter(user => user.name.toLowerCase().includes(userName.toLowerCase()));
+
+    this.setState({ users: filteredUsers });
+  };
+
+  addUser = userInfo => {
+    this.setState({ users: [...this.state.users, userInfo], allUsers: [...this.state.allUsers, userInfo] }, () => {
+      this.filterUsers('');
+    });
+  };
 
   render() {
-    console.log('RENDERIZOU NOVAMENTE O APP')
     return (
       <div className="App">
         <h1 className="alguma-classe">Our First Counter App</h1>
+
+        <CreateNewUserForm addUser={this.addUser} />
+
+        <FilterActions filterUsers={this.filterUsers} />
 
         <ActionButton isAscending={this.state.isSortingAscending} sortUsersByName={this.handleSortUsersByName} />
       
